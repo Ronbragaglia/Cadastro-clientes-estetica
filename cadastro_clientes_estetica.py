@@ -8,53 +8,48 @@ Original file is located at
 """
 
 import sqlite3
+import pandas as pd
 
 db_path = '/content/clinica_estetica.db'
 
-conn = sqlite3.connect(db_path)
-cursor = conn.cursor()
-
-
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS clientes (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    telefone TEXT,
-    email TEXT
-)
-''')
-
-
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS servicos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nome TEXT NOT NULL,
-    duracao INTEGER NOT NULL -- duração em minutos
-)
-''')
-
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS agendamentos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    cliente_id INTEGER,
-    servico_id INTEGER,
-    data_agendamento TEXT,
-    hora_agendamento TEXT,
-    FOREIGN KEY(cliente_id) REFERENCES clientes(id),
-    FOREIGN KEY(servico_id) REFERENCES servicos(id)
-)
-''')
-
-conn.commit()
-conn.close()
-
-print("Banco de dados criado com sucesso!")
-
-import sqlite3
-import pandas as pd
-
 def conectar():
     return sqlite3.connect(db_path)
+
+def criar_tabelas():
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS clientes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        telefone TEXT,
+        email TEXT
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS servicos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nome TEXT NOT NULL,
+        duracao INTEGER NOT NULL -- duração em minutos
+    )
+    ''')
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS agendamentos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        cliente_id INTEGER,
+        servico_id INTEGER,
+        data_agendamento TEXT,
+        hora_agendamento TEXT,
+        FOREIGN KEY(cliente_id) REFERENCES clientes(id),
+        FOREIGN KEY(servico_id) REFERENCES servicos(id)
+    )
+    ''')
+
+    conn.commit()
+    conn.close()
 
 def inserir_cliente(nome, telefone, email):
     conn = conectar()
@@ -101,45 +96,30 @@ def consultar_agendamentos():
     conn.close()
     return df
 
+def exportar_para_excel():
+    clientes_df = consultar_clientes()
+    servicos_df = consultar_servicos()
+    agendamentos_df = consultar_agendamentos()
+
+    with pd.ExcelWriter('/content/clinica_estetica_dados.xlsx', engine='openpyxl') as writer:
+        clientes_df.to_excel(writer, sheet_name='Clientes', index=False)
+        servicos_df.to_excel(writer, sheet_name='Servicos', index=False)
+        agendamentos_df.to_excel(writer, sheet_name='Agendamentos', index=False)
+
+    print("Dados exportados para 'clinica_estetica_dados.xlsx' com sucesso!")
+
+criar_tabelas()
+
 inserir_cliente('Ana Silva', '123456789', 'ana@exemplo.com')
 inserir_servico('Depilação', 30)
 inserir_agendamento(1, 1, '2024-09-20', '10:00')
 
-print("Clientes:")
-print(consultar_clientes())
-
-print("Serviços:")
-print(consultar_servicos())
-
-print("Agendamentos:")
-print(consultar_agendamentos())
-
-import time
-
-start_time = time.time()
 inserir_cliente('João Oliveira', '987654321', 'joao@exemplo.com')
-end_time = time.time()
-print(f"Tempo de inserção de cliente: {end_time - start_time} segundos")
+inserir_servico('Massagem', 60)
+inserir_agendamento(2, 2, '2024-09-21', '11:00')
 
-start_time = time.time()
-clientes_df = consultar_clientes()
-end_time = time.time()
-print(f"Tempo de consulta de clientes: {end_time - start_time} segundos")
+exportar_para_excel()
 
-print(clientes_df)
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-def visualizar_servicos():
-    servicos_df = consultar_servicos()
-    plt.figure(figsize=(10, 6))
-    sns.barplot(x='nome', y='duracao', data=servicos_df)
-    plt.title('Duração dos Serviços')
-    plt.xticks(rotation=45)
-    plt.xlabel('Serviço')
-    plt.ylabel('Duração (min)')
-    plt.show()
-
-visualizar_servicos()
-
+from google.colab import files
+files.download('/content/clinica_estetica_dados.xlsx')
