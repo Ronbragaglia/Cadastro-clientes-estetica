@@ -1,15 +1,36 @@
-Cadastro-clientes-estetica
-Relatório de Implementação do Sistema de Gestão para Clínica de Estética. Este relatório descreve o desenvolvimento e a análise de um sistema de gestão para uma clínica de estética. O objetivo do sistema é gerenciar informações sobre clientes, serviços e agendamentos.
+Descrição do Projeto:
+Este projeto é um sistema de gerenciamento de clínica de estética, desenvolvido em Python, que permite o cadastro de clientes, serviços oferecidos e agendamentos. Além disso, o sistema possui a funcionalidade de exportar os dados para um arquivo Excel, facilitando o acompanhamento e análise dos dados gerados.
 
-🛠️ Tecnologias Utilizadas:
+Funcionalidades:
+Cadastro de Clientes: Registra informações básicas como nome, telefone e e-mail.
 
-SQLite: Para a criação e gerenciamento do banco de dados, permitindo o armazenamento eficiente de informações sobre clientes, serviços e agendamentos.
-Python: Linguagem principal para desenvolvimento do sistema, facilitando a manipulação de dados e a integração com o banco de dados.
-Bibliotecas sqlite3, pandas, matplotlib e seaborn: Utilizadas para realizar operações no banco de dados, análise e visualização dos dados.
-Google Colab: Ambiente de desenvolvimento baseado na nuvem, que proporcionou um espaço ideal para o desenvolvimento e testes do sistema.
-💡 Principais Funcionalidades:
+Cadastro de Serviços: Permite cadastrar os serviços oferecidos pela clínica, com nome e duração.
 
-Cadastro de Clientes: Registro de informações pessoais e de contato.
-Registro de Serviços: Definição de serviços oferecidos com descrição e duração.
-Agendamento de Consultas: Agendamento eficiente de serviços para clientes, com controle de datas e horários.
-📈 Resultados: O sistema foi testado com sucesso, e os resultados foram positivos em termos de eficiência e desempenho. A solução proposta facilita a administração da clínica e melhora a organização dos processos internos.
+Agendamentos: Gera registros de agendamento de serviços, vinculando os clientes aos serviços.
+
+Consultas: Exibe os dados cadastrados sobre clientes, serviços e agendamentos em formato de tabelas utilizando Pandas.
+
+Exportação para Excel: Exporta os dados dos clientes, serviços e agendamentos em um arquivo Excel, com separação por abas para facilitar a visualização.
+
+Tecnologias Utilizadas:
+
+Python: Linguagem principal do projeto.
+
+SQLite3: Banco de dados leve e embutido utilizado para armazenar as informações da clínica.
+
+Pandas: Biblioteca poderosa para manipulação e análise de dados, utilizada para consultas e exportação dos dados.
+
+
+Openpyxl: Biblioteca usada para gerar o arquivo Excel com os dados exportados.
+
+Google Colab: Ambiente usado para rodar o código e fazer o download do arquivo gerado diretamente.
+
+Estrutura do Projeto:
+
+Banco de Dados: Um banco de dados SQLite é criado e contém três tabelas principais:
+
+Clientes: Armazena as informações de cada cliente.
+
+Serviços: Contém detalhes dos serviços oferecidos pela clínica, como nome e duração.Agendamentos: Registra as consultas e horários agendados, vinculando clientes aos serviços.
+
+Exportação de Dados: O sistema consulta os dados armazenados no banco de dados e os exporta para um arquivo Excel (clinica_estetica_dados.xlsx), criando uma aba para cada tabela (Clientes, Serviços e Agendamentos).
