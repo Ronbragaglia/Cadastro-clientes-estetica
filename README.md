@@ -34,3 +34,5 @@ Clientes: Armazena as informações de cada cliente.
 Serviços: Contém detalhes dos serviços oferecidos pela clínica, como nome e duração.Agendamentos: Registra as consultas e horários agendados, vinculando clientes aos serviços.
 
 Exportação de Dados: O sistema consulta os dados armazenados no banco de dados e os exporta para um arquivo Excel (clinica_estetica_dados.xlsx), criando uma aba para cada tabela (Clientes, Serviços e Agendamentos).
+
+
